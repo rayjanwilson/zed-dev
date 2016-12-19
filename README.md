@@ -84,7 +84,7 @@
     - grab a coffee
   - The installer will tell you to reboot
     - at some point the process will pause and tell you to remove the media and press enter
-  - the system will reboot
+  - the system will reboot into Grub
     - you'll be greeted with the boot options for Ubuntu or Windows
   - highlight `Ubuntu` but **Don't Press Enter**
     - we have to do the `nomodeset` thing one last time
@@ -108,6 +108,8 @@
     - click "Apply changes"
     - reboot
 
+> That’s it! In case you need to switch back to Windows, just reboot the computer and select Windows from the Grub menu.
+
 ### CUDA 8.0 and nVidia Drivers
 
 - browse to https://developer.nvidia.com/cuda-downloads
@@ -117,6 +119,7 @@
   - `sudo dpkg -i cuda-repo-ubuntu1604_8.0.44-1_amd64.deb`
   - `sudo apt-get update`
   - `sudo apt-get install cuda`
+  - grab coffee
 
 ### OpenCV 3.1 with CUDA 8.0 Support
 
@@ -158,7 +161,7 @@
     -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
     -D BUILD_EXAMPLES=ON ..
   ```
-  - After running cmake , take a look at the “NVIDIA CUDA” section
+  - After running cmake , take a look at the “NVIDIA CUDA” section and verify it looks like this:
     ```bash
     --   NVIDIA CUDA
     --     Use CUFFT:                   YES
@@ -169,6 +172,7 @@
     --     Use fast math:               YES
     ```
   - `make -j8`
+  - grab coffee
   - `sudo make install`
   - `sudo ldconfig`
 
@@ -179,16 +183,10 @@
 
 
 
-## Other things installed
+## Temporary Dev Notes Scratch Pad
+> this is just a section for dumping stuff as it's added or pulled out in case it is useful later while building this document
+
 - `sudo apt install git vim synaptic indicator-multiload`
-
-
-
-
-
-
-
-
 - we have to clone opencv from git and apply a patch because of a [bug](https://github.com/opencv/opencv/issues/6677)
   - `git clone https://github.com/opencv/opencv.git`
   - `cd opencv`
