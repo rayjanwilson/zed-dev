@@ -150,7 +150,8 @@
   - `git clone --depth=1 https://github.com/opencv/opencv.git`
   - `git clone --depth=1 https://github.com/opencv/opencv_contrib.git`
   - `cd opencv && mkdir build && cd build`
-  ```bash
+  - now run this:
+    ```bash
     cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D WITH_CUDA=ON \
@@ -162,7 +163,7 @@
     -D BUILD_EXAMPLES=ON ..
   ```
   - After running cmake , take a look at the “NVIDIA CUDA” section and verify it looks like this:
-    ```bash
+    >```bash
     --   NVIDIA CUDA
     --     Use CUFFT:                   YES
     --     Use CUBLAS:                  YES
@@ -175,9 +176,32 @@
   - grab coffee
   - `sudo make install`
   - `sudo ldconfig`
+  - get the newly built library into the python virtualenv
+    - verify where the python library is
+      - `ls -l /usr/local/lib/python2.7/site-packages`
+      >`-rw-r--r-- 1 root staff 3598704 Dec 19 06:58 cv2.so`
+    - symlink to the virtualenv location
+      - `cd ~/.virtualenvs/cv/lib/python2.7/site-packages/``
+      - `ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so`
+    - verify it works
+      - `cd ~`
+      - `workon cv`
+      - `python`
+      >```
+      Python 2.7.12 (default, Nov 19 2016, 06:48:10)
+      [GCC 5.4.0 20160609] on linux2
+      Type "help", "copyright", "credits" or "license" for more information.
+      >>> import cv2
+      >>> cv2.__version__
+      '3.1.0-dev'
+      ```
 
 ### ZED SDK
-- https://www.stereolabs.com/getstarted/
+- browse to https://www.stereolabs.com/getstarted/
+- download the sdk for linux
+- `cd ~/Downloads`
+- `chmod +x ZED_SDK_Linux_Ubuntu16_CUDA80_v1.2.0.run`
+- `./ZED_SDK_Linux_Ubuntu16_CUDA80_v1.2.0.run`
 
 
 
@@ -187,6 +211,11 @@
 > this is just a section for dumping stuff as it's added or pulled out in case it is useful later while building this document
 
 - `sudo apt install git vim synaptic indicator-multiload`
+
+- zed dependencies
+  - `libqt5sql5-mysql libqt5svg5 libqt5gui5 libqt5widgets5 unixodbc-dev libpq5 libsybdb5 libglew-dev ttf-mscorefonts-installer libeigen3-dev freeglut3-dev libpng12-dev libboost-all-dev libturbojpeg libjpeg-turbo8 cpuid`
+
+
 - we have to clone opencv from git and apply a patch because of a [bug](https://github.com/opencv/opencv/issues/6677)
   - `git clone https://github.com/opencv/opencv.git`
   - `cd opencv`
