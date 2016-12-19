@@ -4,17 +4,112 @@
 
 > This has to be done on Ubuntu 16.04 x64 because the CUDA 8 related binaries were made with the gcc5 that is installed with 16.04. I tried it with 16.10, but the gcc is version 6 and everything fails.
 
+### Install Ubuntu alongside Windows 10
+- [reference](http://www.tecmint.com/install-ubuntu-16-04-alongside-with-windows-10-or-8-in-dual-boot/) link for dual booting ubuntu with win10
+- [download](http://releases.ubuntu.com/16.04/ubuntu-16.04.1-desktop-amd64.iso) ubuntu 16.04
+- [download](https://etcher.io/) etcher for creating a usb install drive
+- prepare windows for dual boot
+  - reboot computer and enter the uefi bios
+    - this usually requires pressing <del> or <F2>
+  - in the bios
+    - disable fastboot
+    - disable secure boot
+      - usually means changing it from `Windows` to `Other OS`
+    - save and reboot
+  - Start Menu -> Command Prompt (Admin)
+  - `diskmgmt.msc`
+  - right click on C:\
+  - select `shrink`
+  - give at least 40 GB
+    - Once the space has been resized you will see a new unallocated space on the hard drive.
+    - Leave it as default
+  - reboot the computer
+- burn the ubuntu iso to the usb drive
+  - insert the usb drive
+  - start etcher
+  - select the ubuntu 16.04 iso
+  - select the usb drive
+  - start the flash
+  - notes:
+    - you may have to format the usb drive prior to flashing
+      - fat32 with mbr is fine
+  - when flash is complete
+    - keep usb plugged in
+    - reboot computer
+- install ubuntu
+  - enter the uefi bios as before
+    - usually by pressing <del> or <F2>
+  - go to the boot tab
+    - there will be windows, uefi for usb drive, and just the usb drive, maybe some others like your hard drive
+  - select option to boot from uefi associated with the usb
+  - a menu shows up that looks like this:
+  ```
+  Try Ubuntu without installing
+  Install Ubuntu
+  OEM Install (for manufacturers)
+  Check disk for defects
+  ```
+  - cursor down to highlight `Install Ubuntu` but **Don't Press Enter**
+    - we are going to temporarily edit the boot configuration
+    - if we don't do this, we will have graphics problems (black screen) since there are no nVidia drivers installed yet
+  - press the `e` on your keyboard
+  - there is a line that says something like
+    - `linux /boot/zImage root=UUID=904bf39-9234 ro quiet splash`
+  - replace `quiet splash` with `nomodeset`
+    - `nomodeset` tells the kernel to not start video drivers until the system is up and running
+  - press `F10` to boot with this configuration
+  - now you are ready to perform the installation as usual
+  - be sure to leave the following **Unchecked**:
+    - [ ] Download updates while installing Ubuntu
+    - [ ] Install third-party yadda yadda
+  - Now it’s time to select an Installation Type.
+    - You can choose to Install Ubuntu alongside Windows Boot Manager, option that will automatically take care of all the partition steps.
+    - The option `Erase disk and install Ubuntu` should be **avoided** on dual-boot because is potentially dangerous and will wipe out your disk
+    - Otherwise choose `Something else` and lay out the partitions as you see fit
+      - select the unallocated space
+      - click the plus sign
+        - set the mount point to be /
+        - set format to `ext4`
+        - adjust the size to leave room for swap space (like 4GB or whatever)
+        - click ok
+      - select the remaining unallocated space
+      - click plus sign again
+        - set format type to `swap space`
+        - click ok
+      - note:
+        - the section `Device for bootloader installation` doesn't matter since the computer uses UEFI, so this gets ignored. It's a hold-over from old BIOS days
+      - click `Install Now`
+  - The rest of the install should go pretty smooth
+    - set your timezone, username, password, etc
+    - grab a coffee
+  - The installer will tell you to reboot
+    - at some point the process will pause and tell you to remove the media and press enter
+  - the system will reboot
+    - you'll be greeted with the boot options for Ubuntu or Windows
+  - highlight `Ubuntu` but **Don't Press Enter**
+    - we have to do the `nomodeset` thing one last time
+  - press the `e` on your keyboard
+    - this will look familiar but there may be quite a bit more stuff
+  - replace `quiet splash` with `nomodeset`
+  - press `F10` to boot with this configuration
+- install nVidia Driver
+  - [reference](http://www.webupd8.org/2016/06/how-to-install-latest-nvidia-drivers-in.html)
+  - pull up the terminal
+    - click the ubuntu icon in the top left and type `terminal` then click it
+    - right click on the icon in the task bar and select `Lock to Launcher`
+    - makes it easier to get to the terminal later
+  - `sudo add-apt-repository ppa:graphics-drivers/ppa`
+  - `sudo apt-get update`
+  - From System Settings (the gear icon on the left)
+    - open Software & Updates
+    - click on the "Additional Drivers" tab
+    - select the driver 367.57
+      - cuda 8 depends on this version for now
+    - click "Apply changes"
+    - reboot
+
 ### CUDA 8.0 and nVidia Drivers
-- [reference](http://www.webupd8.org/2016/06/how-to-install-latest-nvidia-drivers-in.html)
-- `sudo add-apt-repository ppa:graphics-drivers/ppa`
-- `sudo apt-get update`
-- From System Settings or directly from the menu / Dash
-  - open Software & Updates
-  - click on the "Additional Drivers" tab
-  - select the driver 367.57
-    - cuda 8 depends on this version for now
-  - click "Apply changes"
-  - reboot
+
 - browse to https://developer.nvidia.com/cuda-downloads
   - select the following
     - Linux -> x86_64 -> Ubuntu -> 16.04 -> deb (network)
