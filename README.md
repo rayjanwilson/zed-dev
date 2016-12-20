@@ -121,13 +121,41 @@
   - `sudo apt-get install cuda`
   - grab coffee
 
+### Install PCL with VTK support
+
+```
+sudo apt-get install \
+build-essential cmake cmake-gui doxygen qt5-default \
+mpi-default-dev openmpi-bin openmpi-common \
+libflann-dev libvtk6-qt-dev \
+libqhull* libusb-dev libusb-1.0-0-dev libproj-dev\
+libgtest-dev freeglut3-dev libxmu-dev libxi-dev \
+graphviz mono-complete \
+qt-sdk qt5-default openjdk-8-jdk openjdk-8-jre \
+phonon4qt5-backend-gstreamer \
+phonon4qt5-backend-vlc
+```
+- `cd ~ && mkdir pcl_compile && cd pcl_compile`
+- `git clone https://github.com/PointCloudLibrary/pcl.git`
+- `cd pcl && mkdir build && cd build`
+- `cmake -DCMAKE_BUILD_TYPE=None -DBUILD_CUDA=ON -DBUILD_GPU=ON -DBUILD_apps=ON -DBUILD_examples=ON .. `
+- `make -j8`
+- `sudo make install`
+
+
 ### OpenCV 3.1 with CUDA 8.0 Support
 
 > there are additional things we can build opencv with, like qt5 and eigen3 support. that will be left for further exploration after we get this stuff built.
 
 - [reference](http://www.pyimagesearch.com/2016/07/11/compiling-opencv-with-cuda-support/) for building opencv with cuda 8 support
 - install dependencies
-  - `sudo apt-get install build-essential cmake libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libatlas-base-dev gfortran libhdf5-serial-dev python2.7-dev`
+  ```
+  sudo apt-get install \
+  git build-essential pkg-config \
+  qt5-default libjpeg8-dev libtiff5-dev libjasper-dev \
+  libeigen3-dev libboost-all-dev pkg-config libtbb-dev \
+  libpng12-dev libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \ libatlas-base-dev gfortran libhdf5-serial-dev python2.7-dev
+  ```
 - install and configure python virtual environment
   - `wget https://bootstrap.pypa.io/get-pip.py`
   - `sudo python get-pip.py`
@@ -199,6 +227,7 @@
 ### ZED SDK
 - browse to https://www.stereolabs.com/getstarted/
 - download the sdk for linux
+- plug in your Zed camera
 - `cd ~/Downloads`
 - `chmod +x ZED_SDK_Linux_Ubuntu16_CUDA80_v1.2.0.run`
 - `./ZED_SDK_Linux_Ubuntu16_CUDA80_v1.2.0.run`
